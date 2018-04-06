@@ -3,22 +3,22 @@ var GaussianProcess = function() {
   // instantiate modules
 
   // sample a function from the gp prior
-  function prior(kernel,x) {
-    var l  = math.multiply(kernel(math.matrix(x),math.matrix(x)),np.random_normal(100));
+  function prior(x) {
+    var l  = math.multiply(kernel(math.matrix(x),math.matrix(x),hyperparameters),np.random_normal(100));
     return l;
   };
 
   // get the mean function and covariance of the posterior 
   // gp distribution
-  function posterior(kernel,x,observations,noise) {
+  function posterior(x,observations,noise) {
     var lol = math.matrix(observations._data);
 
     var x_obs = math.matrix(math.transpose(lol)._data[0]);
     var y_obs = math.matrix(math.transpose(lol)._data[1]);
 
-    var k_test   = kernel(x,x);
-    var k_test2  = kernel(x,x_obs);
-    var k_obsv   = kernel(x_obs,x_obs);
+    var k_test   = kernel(x,x,hyperparameters);
+    var k_test2  = kernel(x,x_obs,hyperparameters);
+    var k_obsv   = kernel(x_obs,x_obs,hyperparameters);
 
     // calculate mean value of posterior distribution
     var Z = math.multiply(math.eye(k_obsv._data.length),noise)
@@ -28,7 +28,7 @@ var GaussianProcess = function() {
     //var C = math.add(C,math.multiply(x,0.1));
     var post_mu = (math.transpose([x,C]))
     // calculate convariance matrix for the posterior
-    var D = kernel(x_obs,x)
+    var D = kernel(x_obs,x,hyperparameters)
     var post_cov = math.subtract(k_test,math.multiply(B,D));
 
     //return posterior mean and posterior covariance

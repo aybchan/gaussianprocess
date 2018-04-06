@@ -12,4 +12,10 @@ var plot = new Plot();
 var K    = new Kernel();
 var np   = new NP();
 
+var kernel = K.squared_exponential;
+var hyperparameters = [2,5];
+
+//var kernel = K.periodic;
+//var hyperparameters = [5,1/3,0.05];
+
 GP.init();

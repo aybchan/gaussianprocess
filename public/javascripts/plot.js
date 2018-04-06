@@ -104,7 +104,7 @@ var Plot = function() {
   };
 
   function posterior (x,observations,noise) {
-    var post = GP.posterior(K.squared_exponential,x,observations,noise);
+    var post = GP.posterior(x,observations,noise);
 
     // organise the parameters of the posterior
     var x  = math.matrix(math.transpose(post[0])[0])
@@ -132,7 +132,7 @@ var Plot = function() {
     var data = [];
     init(data);
     for (var g = 0; g < num_prior_samples; g++) {
-      data = math.transpose([x._data,GP.prior(K.squared_exponential,x._data)._data]);
+      data = math.transpose([x._data,GP.prior(x._data)._data]);
       line(data,1, prior_color(Math.random()));
     };
   };
