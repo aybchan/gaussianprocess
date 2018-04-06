@@ -1,8 +1,8 @@
 var Plot = function() {
 
   var margin = {top: 50, right: 75, bottom: 50, left: 75},
-      width = window.innerWidth - margin.left - margin.right,
-      height = window.innerHeight - margin.top - margin.bottom;
+      width = (window.innerWidth)/1.1  - margin.left - margin.right,
+      height = (window.innerHeight) / 1.3- margin.top - margin.bottom;
   
 	var x_range = [0,10];
 	var y_range = [-5,5];
@@ -23,9 +23,9 @@ var Plot = function() {
       .x(function(d) { return x(d); })
       .y(function(d) { return y(d); });
 
-  var svg = d3.select("div.container").append("svg")
+  var svg = d3.select("div.container-gp").append("svg")
       .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("height", height + margin.top + margin.bottom);
 
       // Add the X Axis
       svg.append("g")
@@ -66,12 +66,12 @@ var Plot = function() {
 
     function click(data,coords) {
       //console.log(coords);
-      obs._data.push([x_scale.invert(coords[0]- margin.left),
+      observations._data.push([x_scale.invert(coords[0]- margin.left),
                   y_scale.invert(coords[1])]);
       circle([x_scale.invert(coords[0]-margin.left),y_scale.invert(coords[1])],'red');
 
       path_remove();
-      path_replot(obs);
+      path_replot(observations);
     };
   };
 
@@ -103,8 +103,8 @@ var Plot = function() {
         .attr("fill",color);
   };
 
-  function posterior (x,num_samples,observations,noise) {
-    var post = gp_posterior(K.squared_exponential,x,observations,noise);
+  function posterior (x,observations,noise) {
+    var post = GP.posterior(K.squared_exponential,x,observations,noise);
 
     // organise the parameters of the posterior
     var x  = math.matrix(math.transpose(post[0])[0])
@@ -113,31 +113,31 @@ var Plot = function() {
     var std_dev = math.matrix(math.diag(cov._data));
 
     // sample from posterior, plot
-    for( var i = 0; i < num_samples; i++) {
-      var post_sample = math.add(mu,math.multiply(cov,np_random_normal(cov._size[0])));
+    for( var i = 0; i < num_posterior_samples; i++) {
+      var post_sample = math.add(mu,math.multiply(cov,np.random_normal(cov._size[0])));
       line(math.transpose([x,post_sample]),0.8,post_color(Math.random()));
     };
 
     // (plot these after the samples so they are on top)
     // plot posterior mean
-    line(post[0],3,'#0c0c0c');
+    line(post[0],1,'#0c0c0c');
 
     //  plot posterior deviations
-    line(math.transpose([x,math.add(mu,math.multiply(std_dev,2))]),1,'#202020')
-    line(math.transpose([x,math.subtract(mu,math.multiply(std_dev,2))]),1,'#202020')
+    line(math.transpose([x,math.add(mu,math.multiply(std_dev,2))]),3,'#202020')
+    line(math.transpose([x,math.subtract(mu,math.multiply(std_dev,2))]),3,'#202020')
   };
 
-  function prior (x,num_prior_samples) {
+  function prior (x) {
     // sample from the prior distribution
     var data = [];
     init(data);
     for (var g = 0; g < num_prior_samples; g++) {
-      data = math.transpose([x._data,gp_prior(K.squared_exponential,x._data)._data]);
+      data = math.transpose([x._data,GP.prior(K.squared_exponential,x._data)._data]);
       line(data,1, prior_color(Math.random()));
     };
   };
 
-  function observations (observations) {
+  function plot_observations (obs) {
     var i_obs = 0;
     for (i_obs; i_obs < num_observations; i_obs++) {
       circle(obs._data[i_obs],"#0165cb");
@@ -156,11 +156,9 @@ var Plot = function() {
   };
 
   function path_replot (data) {
-    var num_prior_samples     = 75;
-    var num_posterior_samples = 75;
-    prior(X_range,num_prior_samples);
-    posterior(X_range,num_posterior_samples,data,obs_noise);
-    observations(data)
+    prior(X_range);
+    posterior(X_range,data,obs_noise);
+    plot_observations(data)
   };
 
   return {
@@ -168,8 +166,8 @@ var Plot = function() {
     circle: circle,
     prior: prior,
     posterior: posterior,
-    observations: observations,
     path_remove: path_remove,
-    path_replot: path_replot
+    path_replot: path_replot,
+    plot_observations: plot_observations
   };
 };

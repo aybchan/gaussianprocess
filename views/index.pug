@@ -1,25 +1,38 @@
-<head>
-  <title>Gaussian Process Playground</title>
-  <style>
-  </style>
-  <!-- no wifi version -->
-  <script src="/javascripts/d3.v5.min.js"></script>
-  <script src="/javascripts/math.min.js"></script>
-
-  <!-- <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.0.1/math.min.js"></script> -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-
-  </head>
-  <body>
-    <div class="container">
-      <h1>Gaussian Process Playground</h1>
-      <div class="container" align='center'>
-      </div>
-    </div>
-  </body>
-  <script src="/javascripts/plot.js"></script>
-  <script src="/javascripts/kernel.js"></script>
-  <script src="/javascripts/gp.js"></script>
-  </html>
+<html>
+   <head>
+     <title>Gaussian Process Playground</title>
+     <style>
+     </style>
+     <!-- no wifi version -->
+     <script src="/javascripts/d3.v5.min.js"></script>
+     <script src="/javascripts/math.min.js"></script>
+     <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
+     <!-- <script src="https://d3js.org/d3.v5.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.0.1/math.min.js"></script> -->
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   </head>
+   <body>
+   <!-- As a link -->
+     <nav class="navbar navbar-light bg-light">
+       <a class="navbar-brand" href="/">Gaussian Process Playground</a>
+       <a style="font-size: 2em" href="https://github.com/aybchan"><i class="fab fa-github"></i></a>
+     </nav>
+ 
+     <div class="container-fluid">
+       </br>
+       <div class="container">
+       <h5>About the Gaussian Process</h5>
+       <p>In probability theory and statistics, a Gaussian process is a stochastic process (a collection of random variables indexed by time or space), such that every finite collection of those random variables has a multivariate normal distribution, i.e. every finite linear combination of them is normally distributed. The distribution of a Gaussian process is the joint distributionof all those (infinitely many) random variables, and as such, it is a distribution over functions with a continuous domain, e.g. time or space.</p>
+       
+       <p>Viewed as a machine-learning algorithm, a Gaussian process uses lazy learning and a measure of the similarity between points (the kernel function) to predict the value for an unseen point from training data. The prediction is not just an estimate for that point, but also has uncertainty information—it is a one-dimensional Gaussian distribution (which is the marginal distribution at that point).</p>
+       </div>
+       <div class="container-gp" align='left' >
+       </div>
+     </div>
+   </body>
+   <script src="/javascripts/np.js"></script>
+   <script src="/javascripts/kernel.js"></script>
+   <script src="/javascripts/plot.js"></script>
+   <script src="/javascripts/gp.js"></script>
+   <script src="/javascripts/app.js"></script>
+</html>
