@@ -4,7 +4,6 @@ var Plot = function() {
       width = (window.innerWidth)/1.1  - margin.left - margin.right,
       height = (window.innerHeight) / 1.3- margin.top - margin.bottom;
   
-	var x_range = [0,10];
 	var y_range = [-5,5];
   // set the ranges
   var x_scale = d3.scaleLinear().domain([x_range[0],x_range[1]]).range([0, width]);
@@ -41,7 +40,7 @@ var Plot = function() {
     // Scale the range of the data
     x_scale.domain(d3.extent(data, function(d) { return d[0]; }));
     y_scale.domain(d3.extent(data, function(d) { return d[1]; }));
-    x_scale.domain([0,10]);
+    x_scale.domain(x_range);
     y_scale.domain([-10,10]);
 
     var line = d3.line()
@@ -65,10 +64,9 @@ var Plot = function() {
       click(data,coords);})
 
     function click(data,coords) {
-      //console.log(coords);
       observations._data.push([x_scale.invert(coords[0]- margin.left),
                   y_scale.invert(coords[1])]);
-      circle([x_scale.invert(coords[0]-margin.left),y_scale.invert(coords[1])],'red');
+      circle([x_scale.invert(coords[0]-margin.left),y_scale.invert(coords[1])],'#f03194');
 
       path_remove();
       path_replot(observations);
@@ -114,13 +112,15 @@ var Plot = function() {
 
     // sample from posterior, plot
     for( var i = 0; i < num_posterior_samples; i++) {
+      //L = np.cholesky(math.add(cov,math.eye(cov._size[0])));
+      //var post_sample = math.add(mu,math.multiply(L,np.random_normal(cov._size[0])));
       var post_sample = math.add(mu,math.multiply(cov,np.random_normal(cov._size[0])));
       line(math.transpose([x,post_sample]),0.8,post_color(Math.random()));
     };
 
     // (plot these after the samples so they are on top)
     // plot posterior mean
-    line(post[0],1,'#0c0c0c');
+    line(post[0],1.5,'#0c0c0c');
 
     //  plot posterior deviations
     line(math.transpose([x,math.add(mu,math.multiply(std_dev,2))]),3,'#202020')
@@ -132,19 +132,19 @@ var Plot = function() {
     var data = [];
     init(data);
     for (var g = 0; g < num_prior_samples; g++) {
-      data = math.transpose([x._data,GP.prior(x._data)._data]);
+      data = math.transpose([x._data,GP.prior(x)._data]);
       line(data,1, prior_color(Math.random()));
     };
   };
 
   function plot_observations (obs) {
-    var i_obs = 0;
-    for (i_obs; i_obs < num_observations; i_obs++) {
-      circle(obs._data[i_obs],"#0165cb");
+    var i = 0;
+    for (i; i< num_observations; i++) {
+      circle(obs._data[i],"#003bff");
     };
 
-    for (i_obs; i_obs < num_observations; i_obs++) {
-      circle(obs._data[i_obs],"red");
+    for (i; i< obs._data.length; i++) {
+      circle(obs._data[i],"#00ffc5");
     };
   };
 
@@ -158,7 +158,7 @@ var Plot = function() {
   function path_replot (data) {
     prior(X_range);
     posterior(X_range,data,obs_noise);
-    plot_observations(data)
+    plot_observations(observations)
   };
 
   return {

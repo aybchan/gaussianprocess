@@ -1,20 +1,22 @@
 var Kernel = function () {
 
-  function squared_exponential (x_i,x_j,hparams) {
-    var sigma = hparams[0];
-    var ell   = hparams[1];
+  function squared_exponential (x_i,x_j) {
+    var sigma = hyperparameters[0];
+    var ell   = hyperparameters[1];
 
     var k = np.subtract(x_i,x_j);
     k = np.element_op(k,function (d) { return math.pow(d,2); });
+    k = math.multiply(k,1/ell);
     k = math.exp(math.subtract(0,k));
-     return k;
+    k = math.multiply(sigma**2,k);
+    return k;
 
   };
 
-  function periodic(x_i,x_j,hparams) {
-    var sigma = hparams[0];
-    var ell = hparams[1];
-    var p = hparams[2];
+  function periodic(x_i,x_j) {
+    var sigma = hyperparameters[0];
+    var ell = hyperparameters[1];
+    var p = hyperparameters[2];
 
     var k = math.abs(np.subtract(x_i,x_j));
     k = math.multiply(math.pi,k);
@@ -28,10 +30,10 @@ var Kernel = function () {
     return k;
   };
 
-  function combine(x_i,x_j,hparams) {
-    var sigma = hparams[0];
-    var ell   = hparams[1];
-    var p     = hparams[2];
+  function combine(x_i,x_j) {
+    var sigma = hyperparameters[0];
+    var ell   = hyperparameters[1];
+    var p     = hyperparameters[2];
       
     var sq_ex = squared_exponential(x_i,x_j,sigma,ell);
     var perio = periodic(x_i,x_j,sigma,ell,p);

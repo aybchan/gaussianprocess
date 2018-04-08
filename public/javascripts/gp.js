@@ -4,7 +4,15 @@ var GaussianProcess = function() {
 
   // sample a function from the gp prior
   function prior(x) {
-    var l  = math.multiply(kernel(math.matrix(x),math.matrix(x),hyperparameters),np.random_normal(100));
+    var rand = np.random_normal(x._size[0]);
+   // var I  = math.add(math.eye(x._size[0]),1e-9);
+   // var A  = kernel(x,x);
+   // A = math.add(np.cholesky(A),I);
+   // var Y  = math.multiply(A,rand);
+    var l  = math.multiply(
+                               math.add(kernel(x,x),
+                                        math.multiply(math.eye(x._size[0]),1e-9))
+                           ,np.random_normal(dim));
     return l;
   };
 
@@ -16,9 +24,9 @@ var GaussianProcess = function() {
     var x_obs = math.matrix(math.transpose(lol)._data[0]);
     var y_obs = math.matrix(math.transpose(lol)._data[1]);
 
-    var k_test   = kernel(x,x,hyperparameters);
-    var k_test2  = kernel(x,x_obs,hyperparameters);
-    var k_obsv   = kernel(x_obs,x_obs,hyperparameters);
+    var k_test   = kernel(x,x);
+    var k_test2  = kernel(x,x_obs);
+    var k_obsv   = kernel(x_obs,x_obs);
 
     // calculate mean value of posterior distribution
     var Z = math.multiply(math.eye(k_obsv._data.length),noise)
@@ -28,7 +36,7 @@ var GaussianProcess = function() {
     //var C = math.add(C,math.multiply(x,0.1));
     var post_mu = (math.transpose([x,C]))
     // calculate convariance matrix for the posterior
-    var D = kernel(x_obs,x,hyperparameters)
+    var D = kernel(x_obs,x)
     var post_cov = math.subtract(k_test,math.multiply(B,D));
 
     //return posterior mean and posterior covariance
@@ -61,11 +69,11 @@ var GaussianProcess = function() {
   // initialise the program
   function init () {
     // define the domain for the GP
-    X_range = np.linspace(0,10,100);
+    X_range = np.linspace(x_range[0],x_range[1],dim);
 
     // make observations from our latent function
     obs_noise = 0.5;
-    observations = observe(num_observations,[0,10],obs_noise);
+    observations = observe(num_observations,x_range,obs_noise);
 
     plot.prior(X_range);
     plot.posterior(X_range,observations,obs_noise);

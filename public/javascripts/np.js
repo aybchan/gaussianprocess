@@ -85,10 +85,8 @@ var NP = function () {
         for (var i = 0; i < col; i++) {
           a.push(L[row][i]); 
           b.push(L[col][i]); 
-          console.log('a: [',row,'][',i,']')
-          console.log('b: [',col,'][',i,']')
         };
-        console.log(a,b)
+
         if (a.length == 0 || b.length == 0) {
           var sum = 0;
         } else {
@@ -97,7 +95,6 @@ var NP = function () {
 
         if (row == col) {
           L[row][col] = math.sqrt(math.max(A._data[row][row] - sum,0));
-          console.log('diag',L[row][col],row,col)
         } else {
           L[row][col] = (A._data[row][col] - sum) / L[col][col];
         };
