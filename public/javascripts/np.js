@@ -73,6 +73,40 @@ var NP = function () {
     return math.matrix(new_mat);
   };
 
+  function cholesky(A) {
+    var len = A._size[0];
+    var L   = math.zeros(A._size);
+
+    for (var row = 0; row < len; row++) {
+      for (var col = 0; col < row + 1; col++) {
+        var a   = [];
+        var b   = [];
+
+        for (var i = 0; i < col; i++) {
+          a.push(L[row][i]); 
+          b.push(L[col][i]); 
+          console.log('a: [',row,'][',i,']')
+          console.log('b: [',col,'][',i,']')
+        };
+        console.log(a,b)
+        if (a.length == 0 || b.length == 0) {
+          var sum = 0;
+        } else {
+          var sum = math.multiply(a,b);
+        };
+
+        if (row == col) {
+          L[row][col] = math.sqrt(math.max(A._data[row][row] - sum,0));
+          console.log('diag',L[row][col],row,col)
+        } else {
+          L[row][col] = (A._data[row][col] - sum) / L[col][col];
+        };
+      };
+    };
+
+    return L;
+  };
+
   return {
     linspace: linspace,
     ones: ones,
@@ -80,6 +114,7 @@ var NP = function () {
     random_normal: random_normal,
     random_int: random_int,
     random_float: random_float,
-    element_op: element_op
+    element_op: element_op,
+    cholesky: cholesky
   };
 };

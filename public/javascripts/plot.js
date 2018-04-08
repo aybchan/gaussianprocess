@@ -12,11 +12,11 @@ var Plot = function() {
 
   var prior_color = d3.scaleLinear()
       .domain([0, 1])
-      .range(["#58c696", "#58bfc6"]);
+      .range(["#00d884", "#00e3ff"]);
 
   var post_color = d3.scaleLinear()
       .domain([0, 1])
-      .range(["#c65f58", "#c65f58"]);
+      .range(["#ff3f27", "#ff9689"]);
 
   // define the line
   var valueline = d3.line()

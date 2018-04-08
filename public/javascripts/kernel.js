@@ -28,6 +28,17 @@ var Kernel = function () {
     return k;
   };
 
+  function combine(x_i,x_j,hparams) {
+    var sigma = hparams[0];
+    var ell   = hparams[1];
+    var p     = hparams[2];
+      
+    var sq_ex = squared_exponential(x_i,x_j,sigma,ell);
+    var perio = periodic(x_i,x_j,sigma,ell,p);
+
+    return math.multiply(sq_ex,perio);
+  }
+  
   function not_sure_lol() {
     var c = 1
     var sig_i = 1
@@ -45,6 +56,7 @@ var Kernel = function () {
 
   return {
     squared_exponential: squared_exponential,
-    periodic: periodic
+    periodic: periodic,
+    combine: combine
   };
 };
