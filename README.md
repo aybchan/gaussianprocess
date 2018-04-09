@@ -1,5 +1,9 @@
 # Gaussian process interactive playground
 
+![Bacchus (2006) — Cy Twombly](twombly.jpg)
+
+An interactive demo of a simple gaussian process regression model implemented with d3.js.
+
 ## Installation instructions
 
 1. Requires [node.js](https://nodejs.org) to run
@@ -7,11 +11,8 @@
 2. In the terminal do:
 ```
 git clone https://github.com/aybchan/gaussianprocess
-
 cd gaussianprocess
-
 npm install
-
 npm start
 ```
 
